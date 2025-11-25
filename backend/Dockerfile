@@ -1,22 +1,18 @@
-### ====== BUILD STAGE ======
 FROM maven:3.9-eclipse-temurin-17 AS build
-
 WORKDIR /app
-
 COPY pom.xml .
 COPY src ./src
 
-# ESTE COMANDO ES CRÍTICO: CREA EL .JAR EJECUTABLE
+# Construye el JAR ejecutable de Spring Boot
 RUN mvn -q -DskipTests package spring-boot:repackage
 
-
-### ====== RUNTIME STAGE ======
 FROM eclipse-temurin:17-jre
-
 WORKDIR /app
 
-COPY --from=build /app/target/*.jar app.jar
+# Copia solo el JAR ejecutable (excluyendo el -plain.jar)
+COPY --from=build /app/target/*SNAPSHOT.jar app.jar
 
 EXPOSE 8080
+ENV JAVA_OPTS=""
 
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]

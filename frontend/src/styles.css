@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+  --nova-primary:#004A77;
+  --nova-secondary:#1AAFD0;
+  --nova-accent:#FFC24B;
+  --nova-ink:#0A2342;
+  --nova-bg:#F4F7FB;
+}
+
+body{ font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; color: var(--nova-ink); }
+
+.nova-card { @apply bg-white rounded-xl2 shadow-soft border border-slate-100; }
+.nova-section { @apply max-w-[1400px] mx-auto px-4; }
+.nova-kpi { @apply text-2xl md:text-3xl font-extrabold text-nova-ink; }
+.nova-muted { @apply text-slate-500; }
+.nova-btn { @apply inline-flex items-center justify-center gap-2 rounded-xl2 px-4 py-2 font-semibold transition; }

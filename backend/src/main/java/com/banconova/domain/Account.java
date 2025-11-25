@@ -20,7 +20,7 @@ public class Account {
     private String numero;
 
     @Enumerated(EnumType.STRING)
-    private Currency moneda = Currency.CLP;
+    private com.banconova.domain.enums.Currency moneda = com.banconova.domain.enums.Currency.CLP;
 
     @Column(nullable=false, precision=18, scale=2)
     private BigDecimal saldo = BigDecimal.ZERO;

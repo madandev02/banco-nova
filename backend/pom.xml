@@ -75,7 +75,7 @@
       <scope>runtime</scope>
     </dependency>
 
-    <!-- LOMBOK -->
+    <!-- 🟢 LOMBOK (CORREGIDO) -->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
@@ -111,6 +111,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -118,10 +119,6 @@
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
-          <encoding>UTF-8</encoding>
-          <compilerArgs>
-            <arg>-parameters</arg>
-          </compilerArgs>
           <annotationProcessorPaths>
             <path>
               <groupId>org.projectlombok</groupId>
@@ -131,6 +128,7 @@
           </annotationProcessorPaths>
         </configuration>
       </plugin>
+
     </plugins>
   </build>
 

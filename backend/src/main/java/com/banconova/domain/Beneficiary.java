@@ -24,12 +24,10 @@ public class Beneficiary {
     @Column(nullable=false)
     private String banco;
 
-    @Column(nullable=false)
-    @Column(name="tipo_cuenta", nullable=false)
+    @Column(name="tipo_cuenta", nullable=false\)
     private String tipoCuenta;
 
-    @Column(nullable=false)
-    @Column(name="numero_cuenta", nullable=false)
+    @Column(name="numero_cuenta", nullable=false\)
     private String numeroCuenta;
 
     private boolean favorito = false;

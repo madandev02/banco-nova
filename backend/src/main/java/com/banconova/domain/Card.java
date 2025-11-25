@@ -18,8 +18,7 @@ public class Card {
     @Enumerated(EnumType.STRING)
     private CardType tipo;
 
-    @Column(nullable=false, unique=true)
-    @Column(name="numero_masked", nullable=false, unique=true)
+    @Column(name="numero_masked", nullable=false, unique=true\)
     private String numeroMasked; // **** 4455
 
     private BigDecimal cupo = BigDecimal.ZERO;

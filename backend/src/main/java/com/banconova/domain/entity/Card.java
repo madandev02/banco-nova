@@ -4,6 +4,7 @@ package com.banconova.domain.entity;
 import com.banconova.domain.enums.CardType;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDate;
 
 @Entity
@@ -24,10 +25,10 @@ public class Card {
     private User owner;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private CardType type;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private String maskedNumber;
 
     @Column(nullable = false)

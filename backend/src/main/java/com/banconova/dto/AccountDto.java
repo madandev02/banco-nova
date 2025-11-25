@@ -1,7 +1,9 @@
 
 package com.banconova.dto;
 
+import com.banconova.domain.enums.AccountType;
 import lombok.*;
+
 import java.math.BigDecimal;
 
 @Getter
@@ -12,7 +14,7 @@ import java.math.BigDecimal;
 public class AccountDto {
     private Long id;
     private String accountNumber;
-    private String type;
+    private AccountType type;
     private BigDecimal balance;
     private String currency;
 }

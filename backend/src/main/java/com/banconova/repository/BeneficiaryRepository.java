@@ -10,5 +10,6 @@ import java.util.Optional;
 
 public interface BeneficiaryRepository extends JpaRepository<Beneficiary, Long> {
     List<Beneficiary> findByOwner(User owner);
-    Optional<Beneficiary> findByOwnerAndRutAndBankAndAccountNumber(User owner, String rut, String bank, String accountNumber);
+    boolean existsByOwnerAndRutAndAccountNumber(User owner, String rut, String accountNumber);
+    Optional<Beneficiary> findByOwnerAndId(User owner, Long id);
 }

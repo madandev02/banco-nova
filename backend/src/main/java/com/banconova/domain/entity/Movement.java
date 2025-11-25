@@ -4,6 +4,7 @@ package com.banconova.domain.entity;
 import com.banconova.domain.enums.MovementType;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
@@ -25,7 +26,7 @@ public class Movement {
     private Account account;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private MovementType type;
 
     @Column(nullable = false)

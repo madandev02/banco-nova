@@ -4,6 +4,7 @@ package com.banconova.domain.entity;
 import com.banconova.domain.enums.AccountType;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.math.BigDecimal;
 
 @Entity
@@ -19,17 +20,17 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 30)
     private String accountNumber;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private AccountType type;
 
     @Column(nullable = false)
     private BigDecimal balance;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     private String currency;
 
     @ManyToOne(fetch = FetchType.LAZY)

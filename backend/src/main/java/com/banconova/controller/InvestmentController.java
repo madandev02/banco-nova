@@ -1,43 +1,35 @@
 
 package com.banconova.controller;
 
-import com.banconova.domain.entity.User;
+import com.banconova.domain.enums.InvestmentType;
 import com.banconova.dto.InvestmentDto;
-import com.banconova.repository.UserRepository;
 import com.banconova.service.InvestmentService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/investments")
-@Tag(name = "Investments", description = "Inversiones")
+@Tag(name = "Inversiones", description = "Gestión de inversiones")
 public class InvestmentController {
 
     private final InvestmentService investmentService;
-    private final UserRepository userRepository;
 
-    public InvestmentController(InvestmentService investmentService, UserRepository userRepository) {
+    public InvestmentController(InvestmentService investmentService) {
         this.investmentService = investmentService;
-        this.userRepository = userRepository;
     }
 
     @GetMapping
-    public ResponseEntity<List<InvestmentDto>> list(@AuthenticationPrincipal UserDetails userDetails) {
-        User user = userRepository.findByEmail(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        return ResponseEntity.ok(investmentService.list(user));
+    public ResponseEntity<List<InvestmentDto>> list() {
+        return ResponseEntity.ok(investmentService.getMyInvestments());
     }
 
     @PostMapping
-    public ResponseEntity<InvestmentDto> create(@AuthenticationPrincipal UserDetails userDetails,
-                                                @RequestBody InvestmentDto dto) {
-        User user = userRepository.findByEmail(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        return ResponseEntity.ok(investmentService.create(user, dto));
+    public ResponseEntity<InvestmentDto> create(@RequestParam InvestmentType type,
+                                                @RequestParam BigDecimal amount) {
+        return ResponseEntity.ok(investmentService.createInvestment(type, amount));
     }
 }

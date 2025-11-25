@@ -2,6 +2,7 @@
 package com.banconova.dto;
 
 import lombok.*;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -13,5 +14,5 @@ import java.util.List;
 public class DashboardDto {
     private BigDecimal totalBalance;
     private BigDecimal totalInvested;
-    private List<String> lastMovements;
+    private List<MovementDto> latestMovements;
 }

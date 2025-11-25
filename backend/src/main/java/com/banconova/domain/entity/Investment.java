@@ -4,6 +4,7 @@ package com.banconova.domain.entity;
 import com.banconova.domain.enums.InvestmentType;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
@@ -25,7 +26,7 @@ public class Investment {
     private User owner;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private InvestmentType type;
 
     @Column(nullable = false)

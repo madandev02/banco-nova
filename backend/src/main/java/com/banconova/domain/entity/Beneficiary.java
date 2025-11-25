@@ -24,7 +24,7 @@ public class Beneficiary {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String rut;
 
     @Column(nullable = false)

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/transfers")
-@Tag(name = "Transfers", description = "Transferencias bancarias")
+@Tag(name = "Transferencias", description = "Transferencias bancarias")
 public class TransferController {
 
     private final TransferService transferService;

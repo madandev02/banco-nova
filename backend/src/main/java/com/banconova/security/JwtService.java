@@ -1,9 +1,7 @@
 
 package com.banconova.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,61 +15,62 @@ import java.util.function.Function;
 public class JwtService {
 
     private final Key key;
-    private final long expirationMillis;
-    private final long refreshExpirationMillis;
+    private final long expirationSeconds;
+    private final long refreshExpirationSeconds;
 
     public JwtService(
             @Value("${jwt.secret}") String secret,
-            @Value("${jwt.expiration-seconds}") long expirationSeconds,
-            @Value("${jwt.refresh-expiration-seconds}") long refreshExpirationSeconds
+            @Value("${jwt.expiration-seconds:3600}") long expirationSeconds,
+            @Value("${jwt.refresh-expiration-seconds:604800}") long refreshExpirationSeconds
     ) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
-        this.expirationMillis = expirationSeconds * 1000;
-        this.refreshExpirationMillis = refreshExpirationSeconds * 1000;
+        this.expirationSeconds = expirationSeconds;
+        this.refreshExpirationSeconds = refreshExpirationSeconds;
+    }
+
+    public String generateToken(String subject) {
+        return generateToken(subject, expirationSeconds, Map.of());
+    }
+
+    public String generateRefreshToken(String subject) {
+        return generateToken(subject, refreshExpirationSeconds, Map.of("type", "refresh"));
+    }
+
+    public String generateToken(String subject, long validitySeconds, Map<String, Object> extraClaims) {
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + validitySeconds * 1000);
+        return Jwts.builder()
+                .setClaims(extraClaims)
+                .setSubject(subject)
+                .setIssuedAt(now)
+                .setExpiration(expiry)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
     }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+    public Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
     }
 
-    public String generateToken(String username) {
-        return buildToken(username, expirationMillis);
-    }
-
-    public String generateRefreshToken(String username) {
-        return buildToken(username, refreshExpirationMillis);
-    }
-
-    private String buildToken(String username, long expirationMs) {
-        long now = System.currentTimeMillis();
-        return Jwts.builder()
-                .setClaims(Map.of())
-                .setSubject(username)
-                .setIssuedAt(new Date(now))
-                .setExpiration(new Date(now + expirationMs))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
+    public <T> T extractClaim(String token, Function<Claims, T> resolver) {
+        Claims claims = parse(token);
+        return resolver.apply(claims);
     }
 
     public boolean isTokenValid(String token, String username) {
-        final String usernameFromToken = extractUsername(token);
-        return usernameFromToken.equals(username) && !isTokenExpired(token);
+        String subject = extractUsername(token);
+        return subject.equals(username) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
-
-    private Claims extractAllClaims(String token) {
+    private Claims parse(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()

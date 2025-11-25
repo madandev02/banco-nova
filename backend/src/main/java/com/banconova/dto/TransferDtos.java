@@ -2,6 +2,7 @@
 package com.banconova.dto;
 
 import lombok.*;
+
 import java.math.BigDecimal;
 
 public class TransferDtos {
@@ -12,8 +13,8 @@ public class TransferDtos {
     @AllArgsConstructor
     @Builder
     public static class CreateTransferRequest {
-        private String fromAccountNumber;
-        private String toAccountNumber;
+        private Long fromAccountId;
+        private Long toAccountId; // nullable if external
         private String destinationBank;
         private String destinationAccountNumber;
         private BigDecimal amount;

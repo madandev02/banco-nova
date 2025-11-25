@@ -1,7 +1,9 @@
 
 package com.banconova.dto;
 
+import com.banconova.domain.enums.MovementType;
 import lombok.*;
+
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
@@ -12,7 +14,8 @@ import java.time.OffsetDateTime;
 @Builder
 public class MovementDto {
     private Long id;
-    private String type;
+    private Long accountId;
+    private MovementType type;
     private BigDecimal amount;
     private OffsetDateTime createdAt;
     private String description;

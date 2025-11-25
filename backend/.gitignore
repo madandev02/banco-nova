@@ -1,0 +1,8 @@
+/target
+/.idea
+/*.iml
+/.vscode
+**/application-local.yml
+**/.env
+*.log
+.DS_Store

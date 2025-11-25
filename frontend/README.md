@@ -12,7 +12,4 @@ npm run dev
 ```
 
 ## Demo
-- Login: cualquier usuario / clave (si no hay backend).
-- Registro: crea usuarios mock en localStorage.
-
-Cuando conectes Spring Boot en `http://localhost:8080/api`, el frontend usa esos endpoints.
+Link deploy frontend: https://banco-nova.netlify.app/

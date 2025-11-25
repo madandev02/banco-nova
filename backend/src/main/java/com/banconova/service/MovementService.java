@@ -1,25 +1,36 @@
+
 package com.banconova.service;
 
-import com.banconova.repo.*;
-import lombok.RequiredArgsConstructor;
+import com.banconova.domain.entity.Account;
+import com.banconova.domain.entity.Movement;
+import com.banconova.dto.MovementDto;
+import com.banconova.repository.MovementRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-@Service
-@RequiredArgsConstructor
-public class MovementService {
-    private final AccountRepository accounts;
-    private final UserRepository users;
-    private final MovementRepository movements;
+import java.util.List;
+import java.util.stream.Collectors;
 
-    public Object list(String usuario, Long cuentaId){
-        var u = users.findByUsuario(usuario).orElseThrow();
-        var acc = accounts.findByIdAndUser(cuentaId, u).orElseThrow();
-        return movements.findByAccountOrderByFechaDesc(acc);
+@Service
+public class MovementService {
+
+    private final MovementRepository movementRepository;
+
+    public MovementService(MovementRepository movementRepository) {
+        this.movementRepository = movementRepository;
     }
 
-    public Object latest(String usuario, Long cuentaId){
-        var u = users.findByUsuario(usuario).orElseThrow();
-        var acc = accounts.findByIdAndUser(cuentaId, u).orElseThrow();
-        return movements.findTop10ByAccountOrderByFechaDesc(acc);
+    public List<MovementDto> getLastMovements(Account account, int limit) {
+        return movementRepository.findByAccountOrderByCreatedAtDesc(account, PageRequest.of(0, limit))
+                .getContent()
+                .stream()
+                .map(m -> MovementDto.builder()
+                        .id(m.getId())
+                        .type(m.getType().name())
+                        .amount(m.getAmount())
+                        .createdAt(m.getCreatedAt())
+                        .description(m.getDescription())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

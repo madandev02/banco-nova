@@ -1,0 +1,10 @@
+
+CREATE TABLE beneficiaries (
+ id SERIAL PRIMARY KEY,
+ user_id BIGINT NOT NULL REFERENCES users(id),
+ name VARCHAR(255) NOT NULL,
+ rut VARCHAR(20) NOT NULL,
+ bank VARCHAR(100) NOT NULL,
+ account_type VARCHAR(50) NOT NULL,
+ account_number VARCHAR(50) NOT NULL
+);

@@ -1,35 +1,55 @@
+
 package com.banconova.service;
 
-import com.banconova.common.ApiResponse;
-import com.banconova.domain.Beneficiary;
-import com.banconova.repo.BeneficiaryRepository;
-import com.banconova.repo.UserRepository;
-import lombok.RequiredArgsConstructor;
+import com.banconova.domain.entity.Beneficiary;
+import com.banconova.domain.entity.User;
+import com.banconova.dto.BeneficiaryDto;
+import com.banconova.repository.BeneficiaryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class BeneficiaryService {
-    private final BeneficiaryRepository benRepo;
-    private final UserRepository users;
 
-    public List<Beneficiary> list(String usuario){
-        var u = users.findByUsuario(usuario).orElseThrow();
-        return benRepo.findByUserOrderByAliasAsc(u);
+    private final BeneficiaryRepository beneficiaryRepository;
+
+    public BeneficiaryService(BeneficiaryRepository beneficiaryRepository) {
+        this.beneficiaryRepository = beneficiaryRepository;
     }
 
-    public ApiResponse<Beneficiary> create(String usuario, Beneficiary b){
-        var u = users.findByUsuario(usuario).orElseThrow();
-        b.setUser(u);
-        return ApiResponse.ok(benRepo.save(b), "Destinatario agregado");
+    public List<BeneficiaryDto> list(User user) {
+        return beneficiaryRepository.findByOwner(user).stream()
+                .map(b -> BeneficiaryDto.builder()
+                        .id(b.getId())
+                        .name(b.getName())
+                        .rut(b.getRut())
+                        .bank(b.getBank())
+                        .accountType(b.getAccountType())
+                        .accountNumber(b.getAccountNumber())
+                        .build())
+                .collect(Collectors.toList());
     }
 
-    public ApiResponse<Beneficiary> toggleFav(String usuario, Long id){
-        var u = users.findByUsuario(usuario).orElseThrow();
-        var b = benRepo.findByIdAndUser(id, u).orElseThrow();
-        b.setFavorito(!b.isFavorito());
-        return ApiResponse.ok(benRepo.save(b), "Favorito actualizado");
+    public BeneficiaryDto create(User user, BeneficiaryDto dto) {
+        var existing = beneficiaryRepository
+                .findByOwnerAndRutAndBankAndAccountNumber(user, dto.getRut(), dto.getBank(), dto.getAccountNumber());
+        if (existing.isPresent()) {
+            throw new RuntimeException("Beneficiario duplicado");
+        }
+
+        Beneficiary b = Beneficiary.builder()
+                .owner(user)
+                .name(dto.getName())
+                .rut(dto.getRut())
+                .bank(dto.getBank())
+                .accountType(dto.getAccountType())
+                .accountNumber(dto.getAccountNumber())
+                .build();
+        beneficiaryRepository.save(b);
+
+        dto.setId(b.getId());
+        return dto;
     }
 }

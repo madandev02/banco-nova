@@ -1,29 +1,33 @@
+
 package com.banconova.service;
 
-import com.banconova.dto.account.AccountDto;
-import com.banconova.repo.AccountRepository;
-import com.banconova.repo.UserRepository;
-import lombok.RequiredArgsConstructor;
+import com.banconova.domain.entity.Account;
+import com.banconova.domain.entity.User;
+import com.banconova.dto.AccountDto;
+import com.banconova.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class AccountService {
-    private final AccountRepository accounts;
-    private final UserRepository users;
 
-    public List<AccountDto> listForUser(String usuario){
-        var u = users.findByUsuario(usuario).orElseThrow();
-        return accounts.findByUser(u).stream()
-                .map(a-> AccountDto.builder()
+    private final AccountRepository accountRepository;
+
+    public AccountService(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
+
+    public List<AccountDto> getAccountsForUser(User user) {
+        return accountRepository.findByOwner(user).stream()
+                .map(a -> AccountDto.builder()
                         .id(a.getId())
-                        .tipo(a.getTipo().name())
-                        .numero(a.getNumero())
-                        .moneda(a.getMoneda().name())
-                        .saldo(a.getSaldo())
+                        .accountNumber(a.getAccountNumber())
+                        .type(a.getType().name())
+                        .balance(a.getBalance())
+                        .currency(a.getCurrency())
                         .build())
-                .toList();
+                .collect(Collectors.toList());
     }
 }

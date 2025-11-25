@@ -6,6 +6,7 @@ spring:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/banconova}
     username: ${DB_USER:postgres}
     password: ${DB_PASS:postgres}
+
   jpa:
     hibernate:
       ddl-auto: validate
@@ -27,5 +28,5 @@ app:
     allowed-origins: ${CORS_ORIGINS:http://localhost:5173,http://127.0.0.1:5173,https://banco-nova.netlify.app}
 
 jwt:
-  secret: ${JWT_SECRET:CAMBIA_ESTO_POR_ALGO_LARGO_Y_SEGURO_987654321}
+  secret: ${JWT_SECRET}
   expiration-ms: ${JWT_EXP_MS:86400000}

@@ -13,6 +13,7 @@ public class Transfer {
     private Long id;
 
     @ManyToOne(optional=false)
+    @ManyToOne(optional=false)
     @JoinColumn(name="cuenta_origen_id")
     private Account cuentaOrigen;
 

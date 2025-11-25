@@ -4,8 +4,7 @@ import com.banconova.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity @Table(name="users")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
@@ -24,6 +23,7 @@ public class User {
 
     private String telefono;
 
+    @Column(nullable=false)
     @Column(name="password_hash", nullable=false)
     private String passwordHash;
 

@@ -1,9 +1,0 @@
-
-CREATE TABLE investments (
- id SERIAL PRIMARY KEY,
- user_id BIGINT NOT NULL REFERENCES users(id),
- type VARCHAR(30) NOT NULL,
- amount NUMERIC(18,2) NOT NULL,
- estimated_return NUMERIC(18,2) NOT NULL,
- created_at TIMESTAMP WITH TIME ZONE NOT NULL
-);
